@@ -107,9 +107,33 @@ public class PanelGry extends JPanel implements ActionListener {
         ballPositionY=ballPositionY+dy;
     }
 
+    private void collisionWithBricks() {
+        for (int i = 0; i < columns; i++) {
+            for (int j = 0; j < rows; j++) {
+                if (brickIsAvailable[i][j]==true) {
+                    if (ballPositionX>brickPositionsX[i][j]
+                    &&ballPositionX<brickPositionsX[i][j]+brickWidth
+                    &&ballPositionY+ballDiameter>brickPositionsY[i][j]
+                    &&ballPositionY<brickPositionsY[i][j] + brickHeight){
+                        dy = -dy;
+                        brickIsAvailable[i][j] = false;
+                    } else if (ballPositionY>brickPositionsY[i][j]
+                            &&ballPositionY<brickPositionsY[i][j]+brickHeight
+                            &&ballPositionX+ballDiameter>brickPositionsX[i][j]
+                            &&ballPositionX<brickPositionsX[i][j] + brickWidth) {
+                        dx=-dx;
+                        brickIsAvailable[i][j] = false;
+                        
+                    }
+                }
+            }
+        }
+    }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        collisionWithBricks();
         ballMovement();
         repaint();
     }
