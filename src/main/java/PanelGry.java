@@ -1,8 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.Random;
 
-public class PanelGry extends JPanel {
+public class PanelGry extends JPanel implements ActionListener {
  private final int width = 600;
  private final int height = 500;
  private int paddleWidth = 50;
@@ -24,6 +28,9 @@ public class PanelGry extends JPanel {
  private int brickPositionsX[][] = new int[columns][rows];
  private int brickPositionsY[][] = new int[columns][rows];
  private boolean brickIsAvailable[][] = new boolean[columns][rows];
+ private int dx = 2;
+ private int dy = -2;
+ private Timer timer;
 
 
 
@@ -40,11 +47,12 @@ public class PanelGry extends JPanel {
                 brickPositionsX[i][j] =i*(brickWidth +spaceInColumns) + spaceFromLeft;
                 brickPositionsY[i][j] =j*(brickHeight +spaceInRows) + spaceFromUp;
                 brickIsAvailable[i][j] = true;
-
-
             }
-
         }
+        timer = new Timer(10, this);
+        timer.start();
+        addKeyListener(new Control());
+        setFocusable(true);
     }
 
     @Override
@@ -86,5 +94,37 @@ public class PanelGry extends JPanel {
         }
     }
 
+    private void ballMovement(){
+        if (ballPositionX <=0 || ballPositionX> width-ballDiameter){
+            dx = dx*(-1);
+        }
 
+        if (ballPositionY <=0 || ballPositionY+ ballDiameter >= positionY && ballPositionX>positionX
+        &&ballPositionX<positionX+paddleWidth){
+            dy = dy*(-1);
+        }
+        ballPositionX=ballPositionX+dx;
+        ballPositionY=ballPositionY+dy;
+    }
+
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        ballMovement();
+        repaint();
+    }
+
+    private class Control extends KeyAdapter{
+        @Override
+        public void keyPressed(KeyEvent e) {
+            int keyCode = e.getKeyCode();
+            if (keyCode==KeyEvent.VK_LEFT && positionX>0){
+                positionX = positionX -10;
+            }
+            if (keyCode==KeyEvent.VK_RIGHT && positionX <width-paddleWidth){
+                positionX = positionX +10;
+            }
+
+        }
+    }
 }
