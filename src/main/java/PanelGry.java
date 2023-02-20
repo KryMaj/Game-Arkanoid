@@ -32,6 +32,8 @@ public class PanelGry extends JPanel implements ActionListener {
     private int dy = -2;
     private Timer timer;
     private String gameStatus = "active";
+    private int live = 3;
+
 
 
     public PanelGry() {
@@ -64,6 +66,7 @@ public class PanelGry extends JPanel implements ActionListener {
             drawPaddle(graphics);
             drawBall(graphics);
             drawBricks(graphics);
+            live(graphics);
         } else{
             finish(graphics);
         }
@@ -136,6 +139,11 @@ public class PanelGry extends JPanel implements ActionListener {
 
     private void checkGameStatus(){
         if (ballPositionY> height){
+            live = live -1;
+            dy = dy * (-1);
+        }
+
+        if (live == 0){
             gameStatus = "You lose!";
         }
         int indestructible =0;
@@ -158,6 +166,14 @@ public class PanelGry extends JPanel implements ActionListener {
         graphics.setColor(Color.WHITE);
         graphics.setFont(text);
         graphics.drawString(gameStatus, (width-dimension.stringWidth(gameStatus))/2, height/2);
+    }
+
+    private void live(Graphics graphics){
+        Font text = new Font("Arial", Font.BOLD, 20);
+        FontMetrics dimension = getFontMetrics(text);
+        graphics.setColor(Color.RED);
+        graphics.setFont(text);
+        graphics.drawString("live = " + String.valueOf(live), 20, 20);
     }
 
     @Override
