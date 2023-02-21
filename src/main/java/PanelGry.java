@@ -32,7 +32,10 @@ public class PanelGry extends JPanel implements ActionListener {
     private int dy = -2;
     private Timer timer;
     private String gameStatus = "active";
-    private int live = 3;
+    private int life = 1;
+    JButton button1 = new JButton("Easy");
+    JButton button2 = new JButton("Medium");
+    JButton button3 = new JButton("Hard");
 
 
 
@@ -66,13 +69,15 @@ public class PanelGry extends JPanel implements ActionListener {
             drawPaddle(graphics);
             drawBall(graphics);
             drawBricks(graphics);
-            live(graphics);
+            life(graphics);
         } else{
+
             finish(graphics);
         }
 
 
     }
+
 
     private void drawPaddle(Graphics graphics) {
         graphics.setColor(Color.RED);
@@ -136,14 +141,19 @@ public class PanelGry extends JPanel implements ActionListener {
             }
         }
     }
+private void setDifficulty(){
+        add(button1);
+        add(button3);
+        add(button2);
 
+}
     private void checkGameStatus(){
         if (ballPositionY> height){
-            live = live -1;
+            life = life -1;
             dy = dy * (-1);
         }
 
-        if (live == 0){
+        if (life == 0){
             gameStatus = "You lose!";
         }
         int indestructible =0;
@@ -166,17 +176,16 @@ public class PanelGry extends JPanel implements ActionListener {
         graphics.setColor(Color.WHITE);
         graphics.setFont(text);
         graphics.drawString(gameStatus, (width-dimension.stringWidth(gameStatus))/2, height/2);
+
     }
 
-    private void live(Graphics graphics){
+    private void life(Graphics graphics){
         Font text = new Font("Arial", Font.BOLD, 20);
-        FontMetrics dimension = getFontMetrics(text);
         graphics.setColor(Color.RED);
         graphics.setFont(text);
-        graphics.drawString("live = " + String.valueOf(live), 20, 20);
+        graphics.drawString("life = " + life, 20, 20);
     }
-
-    @Override
+   @Override
     public void actionPerformed(ActionEvent e) {
         checkGameStatus();
         collisionWithBricks();
